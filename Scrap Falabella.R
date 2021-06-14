@@ -1,4 +1,4 @@
-install.packages("Rseleniu")
+install.packages("Rselenium")
 install.packages("rvest")
 install.packages("tidyverse")
 install.packages("tidytext")
@@ -9,13 +9,13 @@ library(tidyverse)
 library(tidytext)
 
  ############################################################
-## Comandos útiles al momentom de interactuar con RSelenium ##
+## Comandos Ãºtiles al momentom de interactuar con RSelenium ##
  ############################################################
 
 remote_driver$open() #Abre el navegador si es que se cierra
 remote_driver$close() #Cierra el servidor
-remote_driver$setWindowSize(width = 800, height = 300) #Tamaño de ventana del servidor
-remote_driver$refresh() #Recargar la página
+remote_driver$setWindowSize(width = 800, height = 300) #TamaÃ±o de ventana del servidor
+remote_driver$refresh() #Recargar la pÃ¡gina
 
 
 ####################################
@@ -45,13 +45,13 @@ driver <- RSelenium::rsDriver(browser = "chrome",
 remote_driver = driver[["client"]]
 
 
-#Determinamos el número de ciclos a calcular
-  #"x": número de comentarios totales
-  #"y": número de comentario visibles
-  #"z": número de carga de comentarios
+#Determinamos el nÃºmero de ciclos a calcular
+  #"x": nÃºmero de comentarios totales
+  #"y": nÃºmero de comentario visibles
+  #"z": nÃºmero de carga de comentarios
 
-#El número de replicaciones está dado por "(n° comentarios total - n° comentarios visibles)/n° comentario de carga"
-#Ej: 130 n° total, 4 visualizaciones inciales, 30 comentarios de carga:
+#El nÃºmero de replicaciones estÃ¡ dado por "(nÂ° comentarios total - nÂ° comentarios visibles)/nÂ° comentario de carga"
+#Ej: 130 nÂ° total, 4 visualizaciones inciales, 30 comentarios de carga:
 # (130 - 4)/30 = 4.2 -> 4 ciclos.
 
 calculo_ciclos = function(x,y,z){
@@ -61,40 +61,40 @@ calculo_ciclos = function(x,y,z){
 
 calculo_ciclos(1,1,1)
 
-#Iteración Boton comentarios
+#IteraciÃ³n Boton comentarios
 
-  #Una vez que calculamos el número de ciclos, estos determinaran el número de clicks del botón
+  #Una vez que calculamos el nÃºmero de ciclos, estos determinaran el nÃºmero de clicks del botÃ³n
 
 click_boton = function(click){
           click <- replicate(click,
                   {
-                  #Scroll de página
+                  #Scroll de pÃ¡gina
                   Body = remote_driver$findElement(using = 'class', 'custom_class')
                   Body$sendKeysToElement(list(key = "end"))
                   #Encontrar button
                   morereviews = remote_driver$findElement(using = 'class', 'bv-content-pagination-container')
                   #Click button
                   morereviews$clickElement()
-                  #Segundos para cargar página
+                  #Segundos para cargar pÃ¡gina
                   Sys.sleep(4)
                   })
 }
 click_boton()
 
-#Iteración Scrap y dataframe
+#IteraciÃ³n Scrap y dataframe
 
 #OBSERVACIONES
 # SIEMPRE cambiar el "url", "click_boton()" y los nodos en caso de ser necesario
 
 # El "Data" es el archivo con los links scrapeados
 Data = read.csv2('C:\\Users\\marti\\OneDrive\\Documentos\\GitHub\\Tesis\\falabella_links.txt')
-n = 1               # numero de páginas a scrapear.
+n = 1               # numero de pÃ¡ginas a scrapear.
 
 for(i in Data) {
   url <- paste0(i)
   remote_driver$navigate(url) # navegar sitio
 
-  click_boton(10) # Número de clicks al botón
+  click_boton(10) # NÃºmero de clicks al botÃ³n
 
   Comment = remote_driver$findElements(using = 'class', value = 'bv-content-summary-body-text')
   Comentarios =  unlist(lapply(Comment, function(x){x$getElementText()}))
