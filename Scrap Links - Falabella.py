@@ -17,14 +17,6 @@ def get_links(URL):
 
 get_links('https://www.falabella.com/falabella-cl/category/cat20002/Moda-Mujer')
 
-# nose como guardar los links en una variable o lista asi que los escribi
-    # Martín : Lo que se puede hacer es transformar esto a un data frame.
-    # en el paso anterior se hace un listado y se le agregan los elementos de la iteración.
-
-# archive_links = ["https://www.falabella.com/falabella-cl/category/cat20002/Moda-Mujer?page=1",
-#                 "https://www.falabella.com/falabella-cl/category/cat20002/Moda-Mujer?page=2",
-#                 "https://www.falabella.com/falabella-cl/category/cat20002/Moda-Mujer?page=3"]
-
 
 # las paginas de fallabella a las cuales se le van a sacar los links de productos
 for link in data:
