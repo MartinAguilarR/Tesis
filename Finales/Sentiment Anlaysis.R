@@ -3,7 +3,9 @@ install.packages("reshape2")
 install.packages("wordcloud")
 install.packages("caret")
 install.packages("syuzhet")
+install.packages("stopwords")
 
+library("stopwords")
 library("ggplot2")
 library("naivebayes")
 library("tidytext")
@@ -19,7 +21,7 @@ library("syuzhet")
 #----- ANÁLISIS DE EMOCIONES -----#
 
 
-Data<-read_csv('/home/jtobar/Tesis/Preprocessed_data.csv', locale = readr::locale(encoding = "UTF-8"))
+Data<-read_csv('/home/jtobar/Tesis/Preprocessed_data_tokeLemma.csv', locale = readr::locale(encoding = "UTF-8"))
 Data <- select(Data,text)
 Data<- rename(Data,Comentario = text)
 
@@ -133,9 +135,6 @@ head(data_tokens)
 #####------ LIMPIEZA DE DATA -----#####                       
 #Esto quiza sea como para un analisis descriptivo
 
-install.packages("stopwords")
-library("stopwords")
-
 stopwords <- get_stopwords("es")
 head(stopwords)
 
@@ -146,9 +145,9 @@ stopwords <- stopwords %>% rename(palabra = word)
 data_limpia <- data_emocion %>% anti_join(stopwords)
 
 data_limpia_fil <- data_limpia %>% count(palabra, sort = T) %>%
-                    filter(n > 20) %>% mutate(palabra = reorder(palabra, n))
+                    filter(n >= 2) %>% mutate(palabra = reorder(palabra, n))
 
-head(data_limpia_fil, n=20)
+head(data_limpia_fil, n>=2)
 
 frecuencia_absoluta <- data_limpia %>% count(palabra, sort=TRUE)
 frecuencia_absoluta
@@ -162,20 +161,20 @@ as_tibble(data_emocion)
 
 # Primera unión, aun se repiten algunos nombres
 data_emocion2 <- data_emocion %>% 
-  group_by(palabra) %>%     
-  summarize(pos = sum(positivo),
-            neg = sum(negativo),   
-            n = n()) %>% 
-  ungroup()
-
+                  group_by(palabra) %>%     
+                  summarize(pos = sum(positivo),
+                            neg = sum(negativo),   
+                            n = n()) %>% 
+                  ungroup()
+    
 # Segunda unión
 head(data_emocion2)
 data_emocion3 <- data_emocion2 %>% 
-  group_by(palabra) %>%     
-  summarize(positivo = sum(pos),
-            negativo = sum(neg),   
-            n = n()) %>% 
-  ungroup()
+                  group_by(palabra) %>%     
+                  summarize(positivo = sum(pos),
+                            negativo = sum(neg),   
+                            n = n()) %>% 
+                  ungroup()
 
 # Se elimina la variable "n" porque no aporta 
 head(data_emocion3)
@@ -187,7 +186,7 @@ Dataset_final <- data_emocion3[ , !(names(data_emocion3) %in% borrar3)]
 # Creación de la variable "sentimiento" donde,
 #1 = positivo y 0 = negativo
 
-df_final = mutate(Dataset_final, sentimiento = ifelse(positivo > negativo, 1,0))
+Df_final_sentiments = mutate(Dataset_final, sentimiento = ifelse(positivo > negativo, 1,0))
 
-write.csv(df_final,'/home/jtobar/Tesis/Data_Final_sentiments.csv', row.names = FALSE)
+write.csv(Df_final_sentiments,'/home/jtobar/Tesis/Data_Final_sentiments.csv', row.names = FALSE)
 
