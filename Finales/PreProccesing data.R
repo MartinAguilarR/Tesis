@@ -1,3 +1,11 @@
+install.packages("tm")
+install.packages("ggplot2")
+install.packages("textstem")
+install.packages("syuzhet")
+install.packages("SnowballC")
+install.packages("stringi")
+
+library(stringi)
 library(tm)
 library(ggplot2)
 library(tidyverse)
@@ -6,27 +14,30 @@ library(readr)
 library(SnowballC)
 library(textstem)
 library(syuzhet)
-library(textstem)
+library(dplyr)
 
-df = read.csv("/home/jtobar/Tesis/Df_Final.csv",
+df = read.csv("C:\\Users\\Admin\\Desktop\\tesis\\Tesis\\Finales\\Df_Final.csv",
               encoding="latin1") %>% tbl_df()
 
 df <- select(df, Categoria,Comentario)
 
+# sacan los tildes
+df$Comentario <- chartr('áéíóúñ','aeioun',df$Comentario)
+
 # Df a corpus
 myCorpus <- VCorpus(VectorSource(df$Comentario))
 
-#MinÃºscula
+#Minuscula
 myCorpus <- tm_map(myCorpus, content_transformer(tolower))
-
-# Remove punctuation
-myCorpus <- tm_map(myCorpus, removePunctuation)
 
 #Remove numbers
 myCorpus <- tm_map(myCorpus, removeNumbers)
 
 #Remove Stopwords
 myCorpus <- tm_map(myCorpus, removeWords, stopwords('spanish'))
+
+# Remove punctuation
+myCorpus <- tm_map(myCorpus, removePunctuation)
 
 # Lemmatizing
 myCorpusLemmatized <- tm_map(myCorpus, lemmatize_strings)
@@ -42,6 +53,6 @@ myDf2 <-data.frame(text = sapply(myCorpusLemmatized, paste, collapse = " "), str
 myDf3 <- data.frame(text = sapply(myCorpusTokeLemma, paste, collapse = " "), stringsAsFactors = FALSE)
 
 # Documento .csv con texto final.
-Preprocessed_data_tokens = write.csv(myDf,'/home/jtobar/Tesis/Preprocessed_data_tokens.csv')
-Preprocessed_data_Lemma = write.csv(myDf,'/home/jtobar/Tesis/Preprocessed_data_Lemma.csv')
-Preprocessed_data_tokeLemma = write.csv(myDf3,'/home/jtobar/Tesis/Preprocessed_data_tokeLemma.csv')
+Preprocessed_data_tokens = write.csv(myDf,'C:\\Users\\Admin\\Desktop\\tesis\\Tesis\\Finales\\Preprocessed_data_tokens_limpia.csv')
+Preprocessed_data_Lemma = write.csv(myDf,'C:\\Users\\Admin\\Desktop\\tesis\\Tesis\\Finales\\Preprocessed_data_Lemma_limpia.csv')
+Preprocessed_data_tokeLemma = write.csv(myDf3,'C:\\Users\\Admin\\Desktop\\tesis\\Tesis\\Finales\\Preprocessed_data_tokeLemma_limpia.csv')

@@ -1,3 +1,7 @@
+install.packages("wordcloud")
+install.packages("e1071")
+install.packages("gmodels")
+
 library("tidyverse")
 library(tm)
 library(wordcloud)
@@ -5,18 +9,18 @@ library(e1071)
 library(gmodels)
 
 # Datas a entrenar
-data <- read_csv('/home/jtobar/Tesis/Data_Final_sentiments.csv', locale = readr::locale(encoding = "UTF-8"))
-data$sentimiento <- as.factor(data$sentimiento)
+data1 <- read_csv('C:\\Users\\Admin\\Desktop\\tesis\\Tesis\\Finales\\Data_Final_sentiments.csv', locale = readr::locale(encoding = "UTF-8"))
+data1$sentimiento <- as.factor(data1$sentimiento)
 
 # Ver distribución de comentarios. 
 # Hay más positivos que negativos
-table(data$sentimiento)
+table(data1$sentimiento)
 
 # Separación data
 set.seed(123)
 
-yelp_train <- data[1:4720, ]
-yelp_test  <- data[4721:6743, ]
+yelp_train <- data1[1:4720, ]
+yelp_test  <- data1[4721:6743, ]
 
 # ver proporción de positivo y negativos
 prop.table(table(yelp_train$sentimiento))
