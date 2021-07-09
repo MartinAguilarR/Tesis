@@ -623,3 +623,8 @@ muestra[611,5] <- 1
 muestra[612,4] <- 1
 muestra[613,5] <- 1
 muestra[614,4] <- 1
+
+#Eliminar las filas con NA
+muestra <-muestra[!is.na(muestra$text),]
+
+write.csv(muestra, "C:\\Users\\Admin\\Desktop\\tesis\\Tesis\\Finales\\muestra_ponderada_pancho.csv")
