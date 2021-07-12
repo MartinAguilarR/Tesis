@@ -1,4 +1,4 @@
-install.packages("Rselenium")
+install.packages("RSelenium")
 install.packages("rvest")
 install.packages("tidyverse")
 install.packages("tidytext")
@@ -9,13 +9,13 @@ library(tidyverse)
 library(tidytext)
 
  ############################################################
-## Comandos útiles al momentom de interactuar con RSelenium ##
+## Comandos utiles al momentom de interactuar con RSelenium ##
  ############################################################
 
 remote_driver$open() #Abre el navegador si es que se cierra
 remote_driver$close() #Cierra el servidor
 remote_driver$setWindowSize(width = 800, height = 300) #Tamaño de ventana del servidor
-remote_driver$refresh() #Recargar la página
+remote_driver$refresh() #Recargar la pagina
 
 
 ####################################
@@ -46,11 +46,11 @@ remote_driver = driver[["client"]]
 
 
 #Determinamos el número de ciclos a calcular
-  #"x": número de comentarios totales
-  #"y": número de comentario visibles
-  #"z": número de carga de comentarios
+  #"x": numero de comentarios totales
+  #"y": numero de comentario visibles
+  #"z": numero de carga de comentarios
 
-#El número de replicaciones está dado por "(n° comentarios total - n° comentarios visibles)/n° comentario de carga"
+#El numero de replicaciones esta dado por "(n° comentarios total - n° comentarios visibles)/n° comentario de carga"
 #Ej: 130 n° total, 4 visualizaciones inciales, 30 comentarios de carga:
 # (130 - 4)/30 = 4.2 -> 4 ciclos.
 
@@ -61,9 +61,9 @@ calculo_ciclos = function(x,y,z){
 
 calculo_ciclos(1,1,1)
 
-#Iteración Boton comentarios
+#Iteracion Boton comentarios
 
-  #Una vez que calculamos el número de ciclos, estos determinaran el número de clicks del botón
+  #Una vez que calculamos el número de ciclos, estos determinaran el número de clicks del boton
 
 click_boton = function(click){
           click <- replicate(click,
@@ -81,20 +81,20 @@ click_boton = function(click){
 }
 click_boton()
 
-#Iteración Scrap y dataframe
+#Iteracion Scrap y dataframe
 
 #OBSERVACIONES
 # SIEMPRE cambiar el "url", "click_boton()" y los nodos en caso de ser necesario
 
 # El "Data" es el archivo con los links scrapeados
-Data = read.csv2('C:\\Users\\marti\\OneDrive\\Documentos\\GitHub\\Tesis\\falabella_links.txt') #Acá se mete el conjunto de links
+Data = read.csv2('C:\\Users\\marti\\OneDrive\\Documentos\\GitHub\\Tesis\\falabella_links.txt') #Aca se mete el archivo con el conjunto de links
 n = 1               # numero de páginas a scrapear, está por defecto
 
 for(i in Data) {
   url <- paste0(i)
   remote_driver$navigate(url) # navegar sitio
 
-  click_boton(10) # Número de clicks al botón
+  click_boton(10) # Número de clicks al boton
 
   Comment = remote_driver$findElements(using = 'class', value = 'bv-content-summary-body-text')
   Comentarios =  unlist(lapply(Comment, function(x){x$getElementText()}))
