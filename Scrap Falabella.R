@@ -87,8 +87,8 @@ click_boton()
 # SIEMPRE cambiar el "url", "click_boton()" y los nodos en caso de ser necesario
 
 # El "Data" es el archivo con los links scrapeados
-Data = read.csv2('C:\\Users\\marti\\OneDrive\\Documentos\\GitHub\\Tesis\\falabella_links.txt')
-n = 1               # numero de páginas a scrapear.
+Data = read.csv2('C:\\Users\\marti\\OneDrive\\Documentos\\GitHub\\Tesis\\falabella_links.txt') #Acá se mete el conjunto de links
+n = 1               # numero de páginas a scrapear, está por defecto
 
 for(i in Data) {
   url <- paste0(i)
