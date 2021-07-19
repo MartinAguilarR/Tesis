@@ -44,7 +44,6 @@ driver <- RSelenium::rsDriver(browser = "chrome",
 #Open the browser
 remote_driver = driver[["client"]]
 
-
 #Determinamos el número de ciclos a calcular
   #"x": numero de comentarios totales
   #"y": numero de comentario visibles
